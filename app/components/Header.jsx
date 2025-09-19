@@ -11,7 +11,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const panelRef = useRef(null);
   const buttonRef = useRef(null);
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, isManagement } = useAuth();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -51,8 +51,11 @@ export default function Header() {
           <Link href="/" className={pathname === "/" ? "active" : ""}>Home</Link>
           <Link href="/kaufen" className={pathname === "/kaufen" ? "active" : ""}>Jetzt kaufen</Link>
           <Link href="/kontakt" className={pathname === "/kontakt" ? "active" : ""}>Kontakt</Link>
-          {user && isAdmin && (
+          {user && (isAdmin || isManagement) && (
             <Link href="/bestellungen" className={pathname === "/bestellungen" ? "active" : ""}>Bestellungen</Link>
+          )}
+          {user && isAdmin && (
+            <Link href="/admin" className={pathname === "/admin" ? "active" : ""}>Admin</Link>
           )}
           {user ? (
             <Link href="/profile" className={pathname === "/profile" ? "active" : ""}>Profil</Link>
@@ -83,8 +86,11 @@ export default function Header() {
             <Link href="/" onClick={() => setOpen(false)}>Home</Link>
             <Link href="/kaufen" onClick={() => setOpen(false)}>Jetzt kaufen</Link>
             <Link href="/kontakt" onClick={() => setOpen(false)}>Kontakt</Link>
-            {user && isAdmin && (
+            {user && (isAdmin || isManagement) && (
               <Link href="/bestellungen" onClick={() => setOpen(false)}>Bestellungen</Link>
+            )}
+            {user && isAdmin && (
+              <Link href="/admin" onClick={() => setOpen(false)}>Admin</Link>
             )}
             {user ? (
               <Link href="/profile" onClick={() => setOpen(false)}>Profil</Link>

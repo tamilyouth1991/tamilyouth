@@ -4,12 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/app/components/AuthProvider";
 
 export default function BestellungenPage() {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin, isManagement } = useAuth();
   const [data, setData] = useState({ orders: [], stats: null, loading: true, error: "" });
 
   useEffect(() => {
     if (loading) return;
-    if (!user || !isAdmin) return;
+    if (!user || (!isAdmin && !isManagement)) return;
     let mounted = true;
     async function load() {
       try {
@@ -38,7 +38,7 @@ export default function BestellungenPage() {
   }, [data.orders]);
 
   if (loading) return <div className="section"><div className="tile">Laden...</div></div>;
-  if (!user || !isAdmin) return <div className="section"><div className="tile">Kein Zugriff</div></div>;
+  if (!user || (!isAdmin && !isManagement)) return <div className="section"><div className="tile">Kein Zugriff</div></div>;
 
   return (
     <div className="section">
