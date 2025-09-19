@@ -2,11 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAuth } from "./AuthProvider";
+import { signOut } from "firebase/auth";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const panelRef = useRef(null);
   const buttonRef = useRef(null);
+  const { user, isAdmin } = useAuth();
+  const pathname = usePathname();
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -22,15 +28,40 @@ export default function Header() {
     }
   }, [open]);
 
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 4);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Auth state is provided by AuthProvider
+
   return (
-    <header className="site-header">
+    <header className={`site-header${scrolled ? " scrolled" : ""}`}>
       <div className="container header-inner">
-        <Link href="/" className="brand">TamilYouth</Link>
+        <Link href="/" className="brand" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <img src="/logo.jpg" alt="Logo" width={24} height={24} style={{ borderRadius: 6, objectFit: "cover" }} />
+          <span style={{ fontSize: "1.05rem", fontWeight: 800 }}>TamilYouth</span>
+        </Link>
 
         <nav className="nav desktop-nav">
-          <Link href="/">Home</Link>
-          <Link href="/kaufen">Jetzt kaufen</Link>
-          <Link href="/kontakt">Kontakt</Link>
+          <Link href="/" className={pathname === "/" ? "active" : ""}>Home</Link>
+          <Link href="/kaufen" className={pathname === "/kaufen" ? "active" : ""}>Jetzt kaufen</Link>
+          <Link href="/kontakt" className={pathname === "/kontakt" ? "active" : ""}>Kontakt</Link>
+          {user && isAdmin && (
+            <Link href="/bestellungen" className={pathname === "/bestellungen" ? "active" : ""}>Bestellungen</Link>
+          )}
+          {user ? (
+            <Link href="/profile" className={pathname === "/profile" ? "active" : ""}>Profil</Link>
+          ) : (
+            <>
+              <Link href="/login" className={pathname === "/login" ? "active" : ""}>Login</Link>
+              <Link href="/register" className={pathname === "/register" ? "active" : ""}>Register</Link>
+            </>
+          )}
         </nav>
 
         <button
@@ -52,6 +83,17 @@ export default function Header() {
             <Link href="/" onClick={() => setOpen(false)}>Home</Link>
             <Link href="/kaufen" onClick={() => setOpen(false)}>Jetzt kaufen</Link>
             <Link href="/kontakt" onClick={() => setOpen(false)}>Kontakt</Link>
+            {user && isAdmin && (
+              <Link href="/bestellungen" onClick={() => setOpen(false)}>Bestellungen</Link>
+            )}
+            {user ? (
+              <Link href="/profile" onClick={() => setOpen(false)}>Profil</Link>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setOpen(false)}>Login</Link>
+                <Link href="/register" onClick={() => setOpen(false)}>Register</Link>
+              </>
+            )}
           </nav>
         </div>
       )}

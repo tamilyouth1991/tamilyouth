@@ -51,7 +51,7 @@ export default function KontaktPage() {
       </section>
 
       {status.state !== "idle" && (
-        <div className="tile" style={{ marginTop: 16, borderColor: status.state === "error" ? "#ef4444" : "#10b981", background: "#fff" }}>
+        <div className="tile" style={{ marginTop: 16, borderColor: status.state === "error" ? "#ef4444" : "#000080", background: "#fff" }}>
           {status.message}
         </div>
       )}

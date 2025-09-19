@@ -65,7 +65,7 @@ export default function Home() {
               <p className="product-meta">{p.desc}</p>
               <div className="divider" />
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 12, color: "#059669", fontWeight: 700 }}>{p.tag}</span>
+                <span style={{ fontSize: 12, color: "#000080", fontWeight: 700 }}>{p.tag}</span>
                 <Link href={{ pathname: "/kaufen", query: { produkt: p.name } }} className="button" style={{ padding: "10px 12px" }}>Vorbestellen</Link>
               </div>
             </div>

@@ -68,7 +68,7 @@ export default function PreorderForm({ productName = "", compact = false }) {
         {status.state === "loading" ? "Senden..." : "Jetzt vorbestellen"}
       </button>
       {status.state !== "idle" && (
-        <p style={{ color: status.state === "error" ? "#b91c1c" : "#065f46" }}>
+        <p style={{ color: status.state === "error" ? "#b91c1c" : "#000080" }}>
           {status.message}
         </p>
       )}

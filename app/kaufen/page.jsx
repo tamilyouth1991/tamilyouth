@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../components/AuthProvider";
+import { getFirebaseDb } from "@/app/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { IconCart, IconTruck } from "../components/Icons";
 
@@ -13,6 +16,7 @@ const CATALOG = [
 ];
 
 export default function KaufenPage() {
+  const { user } = useAuth();
   const params = useSearchParams();
   const preselect = params.get("produkt");
   const router = useRouter();
@@ -32,6 +36,24 @@ export default function KaufenPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Prefill customer from saved profile or Firebase user
+  useEffect(() => {
+    async function hydrate() {
+      if (!user) return;
+      const db = getFirebaseDb();
+      const ref = doc(db, "profiles", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const prof = snap.data();
+        setAddress((prev) => (prev || prof.address || ""));
+        setCustomer((p) => ({ ...p, name: prof.name || p.name, phone: prof.phone || p.phone, email: user.email || p.email }));
+      } else {
+        setCustomer((p) => ({ ...p, name: user.displayName || p.name, email: user.email || p.email }));
+      }
+    }
+    hydrate();
+  }, [user]);
 
   function addToCart(product) {
     setCart((prev) => {
@@ -219,7 +241,7 @@ export default function KaufenPage() {
                 </div>
 
                 {status.state !== "idle" && (
-                  <p style={{ color: status.state === "error" ? "#b91c1c" : "#065f46" }}>{status.message}</p>
+                  <p style={{ color: status.state === "error" ? "#b91c1c" : "#000080" }}>{status.message}</p>
                 )}
               </form>
             </div>

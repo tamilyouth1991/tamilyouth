@@ -1,4 +1,5 @@
 import { sendOrderConfirmation } from "@/app/lib/mailer";
+import { saveOrder, getOrders, getOrderStats } from "@/app/lib/orders";
 
 function generateOrderId() {
   const ts = Date.now().toString(36).toUpperCase();
@@ -29,8 +30,8 @@ export async function POST(request) {
 
     const orderId = generateOrderId();
 
-    // In echter App: persistieren (DB/Email)
-    console.log("Order received", { orderId, items, delivery, customer, subtotal, deliveryFee, total });
+    // Persist lightweight
+    saveOrder({ orderId, items, delivery, customer, subtotal, deliveryFee, total });
 
     // Try sending confirmation email
     try {
@@ -55,5 +56,15 @@ export async function POST(request) {
     });
   } catch (e) {
     return new Response(JSON.stringify({ ok: false, error: "Ungültige Anfrage" }), { status: 400, headers: { "Content-Type": "application/json" } });
+  }
+}
+
+export async function GET() {
+  try {
+    const list = getOrders();
+    const stats = getOrderStats();
+    return new Response(JSON.stringify({ ok: true, orders: list, stats }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (e) {
+    return new Response(JSON.stringify({ ok: false, error: "Fehler beim Laden" }), { status: 500, headers: { "Content-Type": "application/json" } });
   }
 }
