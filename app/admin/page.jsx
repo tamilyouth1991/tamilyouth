@@ -133,7 +133,7 @@ export default function AdminPage() {
                 onUpdateRole={updateUserRole}
                 onDeleteUser={deleteUser}
                 currentUserId={user.uid}
-                allowSelfChange={isOwner}
+                allowSelfChange={isAdmin}
               />
             ))}
             {filteredUsers.length === 0 && (

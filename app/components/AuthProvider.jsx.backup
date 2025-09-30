@@ -31,7 +31,7 @@ export default function AuthProvider({ children }) {
       if (u) {
         const profileRef = doc(db, "profiles", u.uid);
         unsubProfile = onSnapshot(profileRef, async (snap) => {
-          const adminEmails = ["sathanan0711@gmail.com"];
+          const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
           const adminByEmail = adminEmails.includes((u.email || "").toLowerCase());
           const ownerEmail = (process.env.NEXT_PUBLIC_OWNER_EMAIL || "").toLowerCase();
           const ownerByEmail = ownerEmail && (u.email || "").toLowerCase() === ownerEmail;
