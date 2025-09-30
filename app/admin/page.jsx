@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useAuth } from "@/app/components/AuthProvider";
 import { getFirebaseDb } from "@/app/lib/firebase";
 import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc } from "firebase/firestore";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
   const { user, loading, isAdmin } = useAuth();
