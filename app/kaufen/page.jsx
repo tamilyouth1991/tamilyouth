@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import { useAuth } from "../components/AuthProvider";
 import { getFirebaseDb } from "@/app/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -15,7 +15,7 @@ const CATALOG = [
   { id: "mutton-curry", name: "Mutton Curry", price: 17, desc: "Zartes Lamm in würziger Sauce" },
 ];
 
-export default function KaufenPage() {
+function KaufenPageContent() {
   const { user } = useAuth();
   const params = useSearchParams();
   const preselect = params.get("produkt");
@@ -294,5 +294,13 @@ export default function KaufenPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function KaufenPage() {
+  return (
+    <Suspense fallback={<div className="section"><h1 className="hero-title">Bestellen</h1><p className="hero-subtitle">Lade...</p></div>}>
+      <KaufenPageContent />
+    </Suspense>
   );
 }
