@@ -177,120 +177,263 @@ function KaufenPageContent() {
   }
 
   return (
-    <div className="section">
-      <h1 className="hero-title">Bestellen</h1>
-      <p className="hero-subtitle">Wähle Gerichte aus und schliesse deine Bestellung ab</p>
+    <div className="kaufen-container">
+      {/* Mobile Header */}
+      <div className="kaufen-header">
+        <h1 className="kaufen-title">Bestellen</h1>
+        <p className="kaufen-subtitle">Wähle Gerichte aus und schließe deine Bestellung ab</p>
+        
+        {/* Mobile Cart Summary */}
+        {cart.length > 0 && (
+          <div className="mobile-cart-summary">
+            <div className="cart-items-count">
+              <IconCart size={20} />
+              <span>{itemsCount} Artikel</span>
+            </div>
+            <div className="cart-total">
+              {formatChf(total)}
+            </div>
+          </div>
+        )}
+      </div>
 
+      {/* Mobile Status Toast */}
       {status.state !== "idle" && (
-        <div style={{ position: "fixed", right: 16, bottom: 16, zIndex: 50 }}>
-          <div className="tile" style={{ 
-            borderColor: status.state === "error" ? "#ef4444" : status.state === 'loading' ? '#94a3b8' : "#10b981", 
-            background: status.state === "error" ? "#fff7ed" : status.state === 'loading' ? '#f8fafc' : "#f0fdf4", 
-            color: status.state === "error" ? "#7c2d12" : status.state === 'loading' ? '#0f172a' : "#14532d",
-            minWidth: 280
-          }}>
-            {status.message}
+        <div className="mobile-status-toast">
+          <div className={`status-toast ${status.state}`}>
+            <div className="status-icon">
+              {status.state === "loading" && <div className="loading-spinner" />}
+              {status.state === "error" && "⚠️"}
+              {status.state === "success" && "✅"}
+            </div>
+            <span className="status-message">{status.message}</span>
           </div>
         </div>
       )}
 
-      <div className="grid" style={{ marginTop: 8, gridTemplateColumns: "1.2fr 0.8fr" }}>
-        <div className="soft">
-          <div style={{ padding: 16 }}>
-            <h3 style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}><IconCart /> Gerichte</h3>
-            <div className="grid" style={{ gap: 12 }}>
-              {CATALOG.map((item) => {
-                const inCart = cart.find((p) => p.id === item.id);
-                return (
-                  <div key={item.id} className="tile" style={{ overflow: "hidden" }}>
-                    <div style={{ display: "grid", gap: 10 }}>
-                      <div>
-                        <div className="product-title" style={{ marginBottom: 4 }}>{item.name}</div>
-                        <div className="product-meta" style={{ marginBottom: 6 }}>{item.desc}</div>
-                        <div style={{ fontWeight: 800 }}>{formatChf(item.price)}</div>
+      {/* Mobile Layout */}
+      <div className="kaufen-layout">
+        {/* Products Section */}
+        <div className="products-section">
+          <div className="products-header">
+            <h2 className="section-title">
+              <IconCart size={24} />
+              Gerichte
+            </h2>
+          </div>
+          
+          <div className="products-grid">
+            {CATALOG.map((item) => {
+              const inCart = cart.find((p) => p.id === item.id);
+              return (
+                <div key={item.id} className="product-card-mobile">
+                  <div className="product-info">
+                    <h3 className="product-name">{item.name}</h3>
+                    <p className="product-description">{item.desc}</p>
+                    <div className="product-price">{formatChf(item.price)}</div>
+                  </div>
+                  
+                  <div className="product-actions">
+                    {inCart ? (
+                      <div className="quantity-controls">
+                        <button 
+                          className="quantity-btn minus" 
+                          onClick={() => setQuantity(item.id, Math.max(1, (inCart.quantity || 1) - 1))}
+                          aria-label="Menge reduzieren"
+                        >
+                          −
+                        </button>
+                        <span className="quantity-display">{inCart.quantity}</span>
+                        <button 
+                          className="quantity-btn plus" 
+                          onClick={() => addToCart(item)}
+                          aria-label="Menge erhöhen"
+                        >
+                          +
+                        </button>
+                        <button 
+                          className="remove-btn" 
+                          onClick={() => removeFromCart(item.id)}
+                          aria-label="Entfernen"
+                        >
+                          🗑️
+                        </button>
                       </div>
-                      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                        {inCart ? (
-                          <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                            <button className="button secondary" onClick={() => setQuantity(item.id, Math.max(1, (inCart.quantity || 1) - 1))} style={{ padding: "6px 10px" }}>−</button>
-                            <input className="input" type="number" min="1" value={inCart.quantity} onChange={(e) => setQuantity(item.id, Number(e.target.value) || 1)} onWheel={(e) => e.currentTarget.blur()} style={{ width: 56, textAlign: "center" }} />
-                            <button className="button" onClick={() => addToCart(item)} style={{ padding: "6px 10px" }}>+</button>
-                            <button className="button secondary" onClick={() => removeFromCart(item.id)} style={{ padding: "6px 10px" }}>Entfernen</button>
-                          </div>
-                        ) : (
-                          <button className="button" onClick={() => addToCart(item)} style={{ padding: "10px 12px" }}>Hinzufügen</button>
-                        )}
+                    ) : (
+                      <button 
+                        className="add-to-cart-btn" 
+                        onClick={() => addToCart(item)}
+                      >
+                        Hinzufügen
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Cart & Checkout Section */}
+        <div className="cart-section">
+          <div className="cart-header">
+            <h2 className="section-title">Warenkorb & Checkout</h2>
+            {cart.length > 0 && (
+              <div className="cart-summary">
+                <span className="items-count">{itemsCount} Artikel</span>
+                <span className="total-price">{formatChf(total)}</span>
+              </div>
+            )}
+          </div>
+
+          {cart.length === 0 ? (
+            <div className="empty-cart">
+              <IconCart size={48} />
+              <h3>Warenkorb ist leer</h3>
+              <p>Füge leckere Gerichte hinzu!</p>
+            </div>
+          ) : (
+            <div className="cart-content">
+              {/* Cart Items */}
+              <div className="cart-items">
+                {cart.map((p) => (
+                  <div key={p.id} className="cart-item-mobile">
+                    <div className="item-header">
+                      <span className="item-name">{p.name}</span>
+                      <button 
+                        className="remove-btn" 
+                        onClick={() => removeFromCart(p.id)}
+                        aria-label="Artikel entfernen"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                    
+                    <div className="item-details">
+                      <div className="item-price-info">
+                        <span className="item-unit-price">{formatChf(p.price)} pro Stück</span>
+                        <span className="item-total-price">{formatChf(p.price * p.quantity)}</span>
+                      </div>
+                      
+                      <div className="item-quantity-controls">
+                        <button 
+                          className="quantity-btn minus" 
+                          onClick={() => setQuantity(p.id, Math.max(1, p.quantity - 1))}
+                          aria-label="Menge reduzieren"
+                        >
+                          −
+                        </button>
+                        <span className="quantity-display">{p.quantity}</span>
+                        <button 
+                          className="quantity-btn plus" 
+                          onClick={() => addToCart(CATALOG.find(item => item.id === p.id))}
+                          aria-label="Menge erhöhen"
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-        <div className="soft">
-          <div style={{ padding: 16, position: "sticky", top: 8 }}>
-            <h3 style={{ marginBottom: 10 }}>Warenkorb & Checkout</h3>
-            {cart.length === 0 ? (
-              <p className="product-meta">Noch keine Artikel. Füge etwas hinzu.</p>
-            ) : (
-              <div style={{ display: "grid", gap: 10 }}>
-                {cart.map((p) => (
-                  <div key={p.id} style={{ display: "grid", gridTemplateColumns: "1.2fr auto auto auto", gap: 8, alignItems: "center" }}>
-                    <span>{p.name}</span>
-                    <input className="input" type="number" min="1" value={p.quantity} onChange={(e) => setQuantity(p.id, Number(e.target.value) || 1)} onWheel={(e) => e.currentTarget.blur()} style={{ width: 72 }} />
-                    <span style={{ fontWeight: 700 }}>{formatChf(p.price * p.quantity)}</span>
-                    <button className="button secondary" onClick={() => removeFromCart(p.id)} style={{ padding: "8px 10px" }}>Entfernen</button>
-                  </div>
                 ))}
-                <div className="divider" />
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span className="product-meta">Zwischensumme</span>
+              </div>
+
+              {/* Delivery Options */}
+              <div className="delivery-section">
+                <div className="delivery-toggle">
+                  <input 
+                    id="delivery" 
+                    type="checkbox" 
+                    checked={deliveryEnabled} 
+                    onChange={(e) => setDeliveryEnabled(e.target.checked)}
+                    className="delivery-checkbox"
+                  />
+                  <label htmlFor="delivery" className="delivery-label">
+                    <IconTruck size={20} />
+                    <span>Lieferung (+CHF 5 pro Gericht)</span>
+                  </label>
+                </div>
+                
+                {deliveryEnabled && (
+                  <div className="address-input">
+                    <input 
+                      className="input" 
+                      placeholder="Lieferadresse eingeben" 
+                      value={address} 
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Customer Info */}
+              <div className="customer-section">
+                <h3 className="section-subtitle">Kontaktdaten</h3>
+                <div className="customer-form">
+                  <input 
+                    className="input" 
+                    placeholder="Vollständiger Name" 
+                    value={customer.name} 
+                    onChange={(e) => updateCustomer("name", e.target.value)}
+                  />
+                  <input 
+                    className="input" 
+                    placeholder="Telefonnummer" 
+                    value={customer.phone} 
+                    onChange={(e) => updateCustomer("phone", e.target.value)}
+                  />
+                  <input 
+                    className="input" 
+                    type="email" 
+                    placeholder="E-Mail-Adresse" 
+                    value={customer.email} 
+                    onChange={(e) => updateCustomer("email", e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Order Summary */}
+              <div className="order-summary">
+                <div className="summary-row">
+                  <span>Zwischensumme</span>
                   <span>{formatChf(subtotal)}</span>
                 </div>
-              </div>
-            )}
-
-            <div className="divider" />
-
-            <div className="form" style={{ marginTop: 4 }}>
-              <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                <input id="delivery" type="checkbox" checked={deliveryEnabled} onChange={(e) => setDeliveryEnabled(e.target.checked)} />
-                <label htmlFor="delivery" className="product-meta">Zustellen (+CHF 5 pro Gericht)</label>
-              </div>
-              {deliveryEnabled && (
-                <input className="input" placeholder="Adresse für Lieferung" value={address} onChange={(e) => setAddress(e.target.value)} />
-              )}
-
-              <input className="input" placeholder="Name" value={customer.name} onChange={(e) => updateCustomer("name", e.target.value)} />
-              <input className="input" placeholder="Telefon" value={customer.phone} onChange={(e) => updateCustomer("phone", e.target.value)} />
-              <input className="input" type="email" placeholder="E-Mail" value={customer.email} onChange={(e) => updateCustomer("email", e.target.value)} />
-
-              <div className="divider" />
-              <div style={{ display: "grid", gap: 8 }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span className="product-meta">Lieferung</span>
-                  <span>{deliveryEnabled ? formatChf(deliveryFee) : "-"}</span>
+                <div className="summary-row">
+                  <span>Lieferung</span>
+                  <span>{deliveryEnabled ? formatChf(deliveryFee) : "Gratis"}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 800 }}>
+                <div className="summary-row total">
                   <span>Gesamt</span>
                   <span>{formatChf(total)}</span>
                 </div>
               </div>
 
-              <div className="wizard-actions">
-                <button className="button" onClick={checkout} disabled={status.state === "loading" || cart.length === 0}>
-                  {status.state === "loading" ? "Bestellen..." : `Zahlungspflichtig bestellen (${formatChf(total)})`}
-                </button>
-              </div>
-            </div>
+              {/* Checkout Button */}
+              <button 
+                className="checkout-btn" 
+                onClick={checkout} 
+                disabled={status.state === "loading" || cart.length === 0}
+              >
+                {status.state === "loading" ? (
+                  <>
+                    <div className="loading-spinner" />
+                    Bestellung wird gesendet...
+                  </>
+                ) : (
+                  `Bestellen für ${formatChf(total)}`
+                )}
+              </button>
 
-            {orderId && (
-              <div className="tile" style={{ background: "#ecfeff", borderColor: "#06b6d4", marginTop: 10 }}>
-                Bestellnummer: <strong>{orderId}</strong>
-              </div>
-            )}
-          </div>
+              {/* Order Confirmation */}
+              {orderId && (
+                <div className="order-confirmation">
+                  <div className="confirmation-icon">✅</div>
+                  <h3>Bestellung erfolgreich!</h3>
+                  <p>Bestellnummer: <strong>{orderId}</strong></p>
+                  <p>Du erhältst eine Bestätigung per E-Mail.</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
