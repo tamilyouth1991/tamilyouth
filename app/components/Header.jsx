@@ -42,15 +42,29 @@ export default function Header() {
   return (
     <header className={`site-header${scrolled ? " scrolled" : ""}`}>
       <div className="container header-inner">
-        <Link href="/" className="brand" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-          <img src="/logo.jpg" alt="Logo" width={24} height={24} style={{ borderRadius: 6, objectFit: "cover" }} />
-          <span style={{ fontSize: "1.05rem", fontWeight: 800 }}>TamilYouth</span>
+        <Link href="/" className="brand" style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
+          <img 
+            src="/logo.jpg" 
+            alt="FC Tamil Youth St. Gallen 1991 Logo" 
+            width={32} 
+            height={32} 
+            style={{ 
+              borderRadius: "50%", 
+              objectFit: "cover",
+              boxShadow: "0 0 15px rgba(0,255,65,0.3)",
+              border: "2px solid rgba(0,255,65,0.2)"
+            }} 
+          />
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+            <span style={{ fontSize: "1.1rem", fontWeight: 900, color: "#fffff", lineHeight: 1 }}>TYSG 1991</span>
+            <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#ccc", lineHeight: 1 }}>ONE TEAM. ONE SPIRIT.</span>
+          </div>
         </Link>
 
         <nav className="nav desktop-nav">
-          <Link href="/" className={pathname === "/" ? "active" : ""}>Home</Link>
-          <Link href="/kaufen" className={pathname === "/kaufen" ? "active" : ""}>Jetzt kaufen</Link>
-          <Link href="/kontakt" className={pathname === "/kontakt" ? "active" : ""}>Kontakt</Link>
+          <Link href="/" className={pathname === "/" ? "active" : ""}>🏠 Home</Link>
+          <Link href="/kaufen" className={pathname === "/kaufen" ? "active" : ""}>🍽️ Kotthurotti</Link>
+          <Link href="/kontakt" className={pathname === "/kontakt" ? "active" : ""}>📞 Kontakt</Link>
           {user && (isAdmin || isManagement) && (
             <Link href="/bestellungen" className={pathname === "/bestellungen" ? "active" : ""}>Bestellungen</Link>
           )}
@@ -83,9 +97,9 @@ export default function Header() {
       {open && (
         <div className="mobile-nav-panel" ref={panelRef}>
           <nav className="mobile-nav">
-            <Link href="/" onClick={() => setOpen(false)}>Home</Link>
-            <Link href="/kaufen" onClick={() => setOpen(false)}>Jetzt kaufen</Link>
-            <Link href="/kontakt" onClick={() => setOpen(false)}>Kontakt</Link>
+            <Link href="/" onClick={() => setOpen(false)}>🏠 Home</Link>
+            <Link href="/kaufen" onClick={() => setOpen(false)}>🍽️ Kotthurotti</Link>
+            <Link href="/kontakt" onClick={() => setOpen(false)}>📞 Kontakt</Link>
             {user && (isAdmin || isManagement) && (
               <Link href="/bestellungen" onClick={() => setOpen(false)}>Bestellungen</Link>
             )}
