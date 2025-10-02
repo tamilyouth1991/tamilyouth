@@ -56,27 +56,27 @@ export default function Header() {
             }} 
           />
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-            <span style={{ fontSize: "1.1rem", fontWeight: 900, color: "#fffff", lineHeight: 1 }}>TYSG 1991</span>
+            <span style={{ fontSize: "1.1rem", fontWeight: 900, color: "#ffffff", lineHeight: 1 }}>TYSG 1991</span>
             <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#ccc", lineHeight: 1 }}>ONE TEAM. ONE SPIRIT.</span>
           </div>
         </Link>
 
         <nav className="nav desktop-nav">
-          <Link href="/" className={pathname === "/" ? "active" : ""}>🏠 Home</Link>
-          <Link href="/kaufen" className={pathname === "/kaufen" ? "active" : ""}>🍽️ Kotthurotti</Link>
-          <Link href="/kontakt" className={pathname === "/kontakt" ? "active" : ""}>📞 Kontakt</Link>
+          <Link href="/" className={pathname === "/" ? "active" : ""} title="FC Tamil Youth St. Gallen 1991 - Homepage">Home</Link>
+          <Link href="/kaufen" className={pathname === "/kaufen" ? "active" : ""} title="Kotthurotti bestellen - Authentisches Sri Lanka Essen">Kotthurotti</Link>
+          <Link href="/kontakt" className={pathname === "/kontakt" ? "active" : ""} title="Kontakt - FC Tamil Youth St. Gallen 1991">Kontakt</Link>
           {user && (isAdmin || isManagement) && (
-            <Link href="/bestellungen" className={pathname === "/bestellungen" ? "active" : ""}>Bestellungen</Link>
+            <Link href="/bestellungen" className={pathname === "/bestellungen" ? "active" : ""} title="Bestellungen verwalten">Bestellungen</Link>
           )}
           {user && isAdmin && (
-            <Link href="/admin" className={pathname === "/admin" ? "active" : ""}>Admin</Link>
+            <Link href="/admin" className={pathname === "/admin" ? "active" : ""} title="Admin-Bereich">Admin</Link>
           )}
           {user ? (
-            <Link href="/profile" className={pathname === "/profile" ? "active" : ""}>Profil</Link>
+            <Link href="/profile" className={pathname === "/profile" ? "active" : ""} title="Mein Profil">Profil</Link>
           ) : (
             <>
-              <Link href="/login" className={pathname === "/login" ? "active" : ""}>Login</Link>
-              <Link href="/register" className={pathname === "/register" ? "active" : ""}>Register</Link>
+              <Link href="/login" className={pathname === "/login" ? "active" : ""} title="Anmelden">Login</Link>
+              <Link href="/register" className={pathname === "/register" ? "active" : ""} title="Registrieren">Register</Link>
             </>
           )}
         </nav>

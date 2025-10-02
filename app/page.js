@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { IconCart, IconTruck, IconPhone, IconMapPin } from "./components/Icons";
-import ScrollAnimation from "./components/ScrollAnimation";
 import "./homepage.css";
 
 export default function Home() {
@@ -47,11 +46,12 @@ export default function Home() {
             <div className="logo-container">
               <Image 
                 src="/logo.jpg" 
-                alt="FC Tamil Youth St. Gallen 1991 Logo" 
+                alt="FC Tamil Youth St. Gallen 1991 Logo - Tamilischer Fußballverein seit 1991" 
                 width={200} 
                 height={200}
                 className="club-logo"
                 priority
+                title="FC Tamil Youth St. Gallen 1991 - 35 Jahre Tradition"
               />
             </div>
 
@@ -79,56 +79,62 @@ export default function Home() {
       </section>
 
       {/* Kotthurotti Bestell-Sektion */}
-      <ScrollAnimation className="kotthurotti-section scroll-animate">
+      <section className="kotthurotti-section">
         <div className="section-container">
-          <ScrollAnimation className="section-header scroll-animate scroll-animate-delay-1">
-            <h2 className="section-title">Unterstütze unser Jubiläums-Turnier! 🏆</h2>
+          <div className="section-header">
+            <h2 className="section-title">Unterstütze unser Jubiläums-Turnier!</h2>
             <p className="section-subtitle">
               Bestelle jetzt Kotthurotti und unterstütze damit unser 35-jähriges Jubiläums-Hallenturnier am 2. November 2025
             </p>
-          </ScrollAnimation>
+          </div>
           
-          <ScrollAnimation className="support-info scroll-animate scroll-animate-delay-2">
+          <div className="support-info">
             <div className="support-card">
-              <div className="support-icon">🏆</div>
+              <div className="support-icon">
+                <IconTruck />
+              </div>
               <div className="support-text">
                 <h3>Jubiläums-Turnier</h3>
                 <p>35 Jahre FC Tamil Youth St. Gallen</p>
               </div>
             </div>
             <div className="support-card">
-              <div className="support-icon">📍</div>
+              <div className="support-icon">
+                <IconMapPin />
+              </div>
               <div className="support-text">
                 <h3>Athletikzentrum SG</h3>
                 <p>Parkstrasse 2, 9000 St. Gallen</p>
               </div>
             </div>
             <div className="support-card">
-              <div className="support-icon">💰</div>
+              <div className="support-icon">
+                <IconCart />
+              </div>
               <div className="support-text">
                 <h3>Preisgeld</h3>
                 <p>CHF 1000.- zu gewinnen</p>
               </div>
             </div>
-          </ScrollAnimation>
+          </div>
 
-          <ScrollAnimation className="cta-button-container scroll-animate scroll-animate-delay-3">
+          <div className="cta-button-container">
             <Link href="/kaufen" className="order-button">
               <IconCart />
               Jetzt Kotthurotti bestellen
             </Link>
-          </ScrollAnimation>
+          </div>
         </div>
-      </ScrollAnimation>
+      </section>
 
       {/* Bestellanleitung mit Mengenrabatt */}
-      <ScrollAnimation className="ordering-guide-section scroll-animate">
+      <section className="ordering-guide-section">
         <div className="section-container">
-          <ScrollAnimation className="section-title scroll-animate scroll-animate-delay-1">
-            <h2>So einfach bestellst du 📱</h2>
-          </ScrollAnimation>
+          <div className="section-title">
+            <h2>So einfach bestellst du</h2>
+          </div>
           
-          <ScrollAnimation className="steps-container scroll-animate scroll-animate-delay-2">
+          <div className="steps-container">
             <div className="step">
               <div className="step-number">1</div>
               <div className="step-content">
@@ -150,10 +156,10 @@ export default function Home() {
                 <p>Bequem abholen oder liefern lassen (+CHF 5 pro Gericht)</p>
               </div>
             </div>
-          </ScrollAnimation>
+          </div>
 
-          <ScrollAnimation className="pricing-info scroll-animate scroll-animate-delay-3">
-            <h3>Mengenrabatt-System 💰</h3>
+          <div className="pricing-info">
+            <h3>Mengenrabatt-System</h3>
             <div className="pricing-grid">
               <div className="pricing-card">
                 <div className="quantity">1-2 Portionen</div>
@@ -168,17 +174,17 @@ export default function Home() {
                 <div className="price">-15% Rabatt</div>
               </div>
             </div>
-          </ScrollAnimation>
+          </div>
         </div>
-      </ScrollAnimation>
+      </section>
 
       {/* Produktübersicht */}
-      <ScrollAnimation className="products-section scroll-animate">
+      <section className="products-section">
         <div className="section-container">
-          <ScrollAnimation className="section-title scroll-animate scroll-animate-delay-1">
-            <h2>Unsere Produkte 🍽️</h2>
-          </ScrollAnimation>
-          <ScrollAnimation className="products-grid scroll-animate scroll-animate-delay-2">
+          <div className="section-title">
+            <h2>Unsere Produkte</h2>
+          </div>
+          <div className="products-grid">
             {products.map((product) => (
               <div key={product.name} className="product-card">
                 <div className="product-header">
@@ -195,9 +201,9 @@ export default function Home() {
                 </div>
               </div>
             ))}
-          </ScrollAnimation>
+          </div>
         </div>
-      </ScrollAnimation>
+      </section>
     </div>
   );
 }

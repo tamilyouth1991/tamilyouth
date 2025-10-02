@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { IconMail, IconMapPin, IconPhone } from "../components/Icons";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 export default function KontaktPage() {
   const [values, setValues] = useState({ name: "", email: "", message: "" });
@@ -29,6 +30,7 @@ export default function KontaktPage() {
 
   return (
     <div className="section">
+      <Breadcrumbs items={[{ label: "Kontakt" }]} />
       <section className="hero">
         <div>
           <h1 className="hero-title">Kontakt</h1>

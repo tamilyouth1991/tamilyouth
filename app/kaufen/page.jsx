@@ -6,6 +6,7 @@ import { getFirebaseDb } from "@/app/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { IconCart, IconTruck } from "../components/Icons";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 const CATALOG = [
   { id: "kottu", name: "Kottu Rotti", price: 14, desc: "Klassischer Street‑Food Favorit" },
@@ -178,6 +179,7 @@ function KaufenPageContent() {
 
   return (
     <div className="kaufen-container">
+      <Breadcrumbs items={[{ label: "Kotthurotti bestellen" }]} />
       {/* Mobile Header */}
       <div className="kaufen-header">
         <h1 className="kaufen-title">Bestellen</h1>
@@ -203,8 +205,8 @@ function KaufenPageContent() {
           <div className={`status-toast ${status.state}`}>
             <div className="status-icon">
               {status.state === "loading" && <div className="loading-spinner" />}
-              {status.state === "error" && "⚠️"}
-              {status.state === "success" && "✅"}
+              {status.state === "error" && <span style={{ color: "#ef4444" }}>!</span>}
+              {status.state === "success" && <span style={{ color: "#10b981" }}>✓</span>}
             </div>
             <span className="status-message">{status.message}</span>
           </div>
