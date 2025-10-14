@@ -6,8 +6,8 @@ import "./homepage.css";
 
 export default function Home() {
   const products = [
-    { name: "Vegi Kotthurotti", price: "CHF 12.00", desc: "Fein gehacktes Roti mit frischem Gemüse.", tag: "Vegan" },
-    { name: "Kotthurotti", price: "CHF 15.00", desc: "Klassisches Kotthurotti mit Fleisch.", tag: "Beliebt" },
+    { name: "Vegi Kotthurotti", price: "CHF 10.00", desc: "Fein gehacktes Roti mit frischem Gemüse.", tag: "Vegan" },
+    { name: "Kotthurotti", price: "CHF 12.00", desc: "Klassisches Kotthurotti mit Fleisch.", tag: "Beliebt" },
     { name: "Cola Dose", price: "CHF 3.50", desc: "Erfrischende Cola Dose.", tag: "Getränk" },
     { name: "Eistee Dose", price: "CHF 3.50", desc: "Süßer Eistee zum Essen.", tag: "Getränk" },
   ];
@@ -160,19 +160,27 @@ export default function Home() {
           </div>
 
           <div className="pricing-info scroll-fade-in scroll-delay-4">
-            <h3>Mengenrabatt-System</h3>
+            <h3>Preisübersicht</h3>
             <div className="pricing-grid">
               <div className="pricing-card scroll-scale-in scroll-delay-1">
-                <div className="quantity">1-2 Portionen</div>
-                <div className="price">Normalpreis</div>
+                <div className="quantity">Veggi Kotthu</div>
+                <div className="price">CHF 10.- (Abholung)</div>
+                <div className="price">CHF 14.- (Lieferung)</div>
               </div>
               <div className="pricing-card scroll-scale-in scroll-delay-2">
-                <div className="quantity">3-5 Portionen</div>
-                <div className="price">-10% Rabatt</div>
+                <div className="quantity">Normaler Kotthu</div>
+                <div className="price">CHF 12.- (Abholung)</div>
+                <div className="price">CHF 16.- (Lieferung)</div>
               </div>
               <div className="pricing-card scroll-scale-in scroll-delay-3">
-                <div className="quantity">6+ Portionen</div>
-                <div className="price">-15% Rabatt</div>
+                <div className="quantity">2 Gerichte</div>
+                <div className="price">CHF 20.- (Abholung)</div>
+                <div className="price">CHF 25.- (Lieferung)</div>
+              </div>
+              <div className="pricing-card scroll-scale-in scroll-delay-4">
+                <div className="quantity">Jedes weitere Gericht</div>
+                <div className="price">CHF 10.- (Abholung)</div>
+                <div className="price">CHF 12.- (Lieferung)</div>
               </div>
             </div>
           </div>

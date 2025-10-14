@@ -22,8 +22,43 @@ export async function POST(request) {
 
     const DELIVERY_FEE_PER_ITEM = 5; // CHF pro Gericht
 
-    const subtotal = items.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 0), 0);
-    const deliveryFee = delivery?.enabled ? (items.reduce((sum, it) => sum + (it.quantity || 0), 0) * DELIVERY_FEE_PER_ITEM) : 0;
+    // Complex pricing logic based on new policy
+    const kotthuItems = items.filter(it => it.id === "vegi-kotthurotti" || it.id === "kotthurotti");
+    const drinkItems = items.filter(it => it.id === "cola-dose" || it.id === "eistee-dose");
+    
+    let subtotal = 0;
+    
+    // Count total kotthu items
+    const totalKotthuCount = kotthuItems.reduce((sum, it) => sum + (it.quantity || 0), 0);
+    
+    if (totalKotthuCount === 1) {
+      // Single kotthu: veggi = 10, normal = 12
+      const veggiCount = kotthuItems.find(it => it.id === "vegi-kotthurotti")?.quantity || 0;
+      const normalCount = kotthuItems.find(it => it.id === "kotthurotti")?.quantity || 0;
+      subtotal += veggiCount * 10 + normalCount * 12;
+    } else if (totalKotthuCount === 2) {
+      // Two kotthu items: 20 CHF total
+      subtotal += 20;
+    } else if (totalKotthuCount > 2) {
+      // First two kotthu: 20 CHF, each additional: 10 CHF
+      subtotal += 20 + (totalKotthuCount - 2) * 10;
+    }
+    
+    // Add drinks at their regular price
+    subtotal += drinkItems.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 0), 0);
+
+    // Delivery fee: +4 CHF for single kotthu, +5 CHF for two kotthu, +2 CHF for each additional kotthu
+    let deliveryFee = 0;
+    if (delivery?.enabled) {
+      if (totalKotthuCount === 1) {
+        deliveryFee = 4; // +4 CHF for single kotthu
+      } else if (totalKotthuCount === 2) {
+        deliveryFee = 5; // +5 CHF for two kotthu
+      } else if (totalKotthuCount > 2) {
+        deliveryFee = 5 + (totalKotthuCount - 2) * 2; // +5 CHF for first two, +2 CHF for each additional
+      }
+    }
+    
     const total = subtotal + deliveryFee;
 
     const orderId = generateOrderId();

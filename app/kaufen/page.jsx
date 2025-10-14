@@ -13,14 +13,14 @@ const CATALOG = [
   { 
     id: "vegi-kotthurotti", 
     name: "Vegi Kotthurotti", 
-    price: 12, 
+    price: 10, 
     desc: "Fein gehacktes Roti mit frischem Gemüse.",
     category: "Vegan"
   },
   { 
     id: "kotthurotti", 
     name: "Kotthurotti", 
-    price: 15, 
+    price: 12, 
     desc: "Klassisches Kotthurotti mit Fleisch.",
     category: "Beliebt"
   },
@@ -55,6 +55,9 @@ function KaufenPageContent() {
 
   useEffect(() => {
     // Restore persisted state
+    /*
+    Ein veggi kotthu kostet 10fr und wenn man es bestellt kostet es 4fr plus. ein normaler kotthu kostet 12fr un dwenn man es bestellt kostet es 4franken mehr. wenn man 2 gerichte also veggi kotthu oder normaler kotthu bestellt dann kostet es 20fr und wenn man es bestellt dan 25 fr. Jede weitere gericht kostet wenn 10fr und wenn man liefern auswählt kostet jede weitere gericht 12fr.
+    */
     try {
       const saved = JSON.parse(localStorage.getItem("ty_cart_state") || "null");
       if (saved) {
@@ -130,9 +133,55 @@ function KaufenPageContent() {
     }
   }
 
-  const subtotal = useMemo(() => cart.reduce((sum, p) => sum + p.price * p.quantity, 0), [cart]);
+  // Complex pricing logic based on new policy
+  const subtotal = useMemo(() => {
+    const kotthuItems = cart.filter(p => p.id === "vegi-kotthurotti" || p.id === "kotthurotti");
+    const drinkItems = cart.filter(p => p.id === "cola-dose" || p.id === "eistee-dose");
+    
+    let total = 0;
+    
+    // Count total kotthu items
+    const totalKotthuCount = kotthuItems.reduce((sum, p) => sum + p.quantity, 0);
+    
+    if (totalKotthuCount === 1) {
+      // Single kotthu: veggi = 10, normal = 12
+      const veggiCount = kotthuItems.find(p => p.id === "vegi-kotthurotti")?.quantity || 0;
+      const normalCount = kotthuItems.find(p => p.id === "kotthurotti")?.quantity || 0;
+      total += veggiCount * 10 + normalCount * 12;
+    } else if (totalKotthuCount === 2) {
+      // Two kotthu items: 20 CHF total
+      total += 20;
+    } else if (totalKotthuCount > 2) {
+      // First two kotthu: 20 CHF, each additional: 10 CHF
+      total += 20 + (totalKotthuCount - 2) * 10;
+    }
+    
+    // Add drinks at their regular price
+    total += drinkItems.reduce((sum, p) => sum + p.price * p.quantity, 0);
+    
+    return total;
+  }, [cart]);
+  
   const itemsCount = useMemo(() => cart.reduce((sum, p) => sum + p.quantity, 0), [cart]);
-  const deliveryFee = deliveryEnabled ? itemsCount * 5 : 0;
+  
+  // Delivery fee: +4 CHF for single kotthu, +5 CHF for two kotthu, +2 CHF for each additional kotthu
+  const deliveryFee = useMemo(() => {
+    if (!deliveryEnabled) return 0;
+    
+    const kotthuItems = cart.filter(p => p.id === "vegi-kotthurotti" || p.id === "kotthurotti");
+    const totalKotthuCount = kotthuItems.reduce((sum, p) => sum + p.quantity, 0);
+    
+    if (totalKotthuCount === 1) {
+      return 4; // +4 CHF for single kotthu
+    } else if (totalKotthuCount === 2) {
+      return 5; // +5 CHF for two kotthu
+    } else if (totalKotthuCount > 2) {
+      return 5 + (totalKotthuCount - 2) * 2; // +5 CHF for first two, +2 CHF for each additional
+    }
+    
+    return 0;
+  }, [cart, deliveryEnabled]);
+  
   const total = subtotal + deliveryFee;
 
   function updateCustomer(field, value) {
@@ -372,7 +421,7 @@ function KaufenPageContent() {
                     />
                     <label htmlFor="delivery" className="delivery-label">
                       <IconTruck size={20} />
-                      <span>Lieferung (+CHF 5 pro Gericht)</span>
+                      <span>Lieferung (siehe Preisübersicht)</span>
                     </label>
                   </div>
                   
