@@ -269,6 +269,23 @@ export default function BestellungenPage() {
         <StatCard label="Storniert" value={data.stats?.cancelledOrders ?? 0} />
       </div>
 
+      {/* Item Breakdown */}
+      {data.stats?.itemBreakdown && (
+        <div className="soft" style={{ marginBottom: '20px' }}>
+          <div style={{ padding: '16px' }}>
+            <h3 style={{ marginBottom: '12px' }}>Artikel Aufschlüsselung</h3>
+            <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: '12px' }}>
+              {Object.entries(data.stats.itemBreakdown).map(([itemName, quantity]) => (
+                <div key={itemName} className="tile" style={{ display: "grid", gap: 6 }}>
+                  <div className="product-meta">{itemName}</div>
+                  <div style={{ fontWeight: 900, fontSize: "1.4rem" }}>{quantity}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Orders list */}
       <div className="section" style={{ display: "grid", gap: 12 }}>
         {data.loading && <div className="tile">Laden...</div>}

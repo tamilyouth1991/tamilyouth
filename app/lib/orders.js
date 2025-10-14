@@ -47,6 +47,24 @@ export function getOrderStats() {
   const completedOrders = orders.filter(o => o.status === 'completed').length;
   const cancelledOrders = orders.filter(o => o.status === 'cancelled').length;
   
+  // Item breakdown
+  const itemBreakdown = {
+    'Vegi Kotthurotti': 0,
+    'Kotthurotti': 0,
+    'Cola Dose': 0,
+    'Eistee Dose': 0
+  };
+  
+  orders.forEach(order => {
+    if (order.items) {
+      order.items.forEach(item => {
+        if (itemBreakdown.hasOwnProperty(item.name)) {
+          itemBreakdown[item.name] += item.quantity || 0;
+        }
+      });
+    }
+  });
+  
   return { 
     totalOrders, 
     revenue, 
@@ -55,7 +73,8 @@ export function getOrderStats() {
     itemsSold,
     pendingOrders,
     completedOrders,
-    cancelledOrders
+    cancelledOrders,
+    itemBreakdown
   };
 }
 
