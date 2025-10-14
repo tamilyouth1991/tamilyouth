@@ -1,5 +1,5 @@
 import { sendOrderConfirmation } from "@/app/lib/mailer";
-import { saveOrder, getOrders, getOrderStats } from "@/app/lib/orders";
+import { saveOrder, getOrders, getOrderStats, getOrderById, updateOrder, deleteOrder, getOrdersByPostalCode, getOrdersGroupedByPostalCode } from "@/app/lib/orders";
 
 function generateOrderId() {
   return Math.floor(10000 + Math.random() * 90000).toString();
@@ -92,12 +92,67 @@ export async function POST(request) {
   }
 }
 
-export async function GET() {
+export async function GET(request) {
   try {
-    const list = getOrders();
-    const stats = getOrderStats();
+    const url = new URL(request.url);
+    const postalCode = url.searchParams.get('postalCode');
+    const grouped = url.searchParams.get('grouped') === 'true';
+    
+    let list, stats;
+    
+    if (grouped) {
+      list = getOrdersGroupedByPostalCode();
+      stats = getOrderStats();
+    } else if (postalCode) {
+      list = getOrdersByPostalCode(postalCode);
+      stats = getOrderStats();
+    } else {
+      list = getOrders();
+      stats = getOrderStats();
+    }
+    
     return new Response(JSON.stringify({ ok: true, orders: list, stats }), { status: 200, headers: { "Content-Type": "application/json" } });
   } catch (e) {
     return new Response(JSON.stringify({ ok: false, error: "Fehler beim Laden" }), { status: 500, headers: { "Content-Type": "application/json" } });
+  }
+}
+
+export async function PUT(request) {
+  try {
+    const data = await request.json();
+    const { orderId, updates } = data || {};
+
+    if (!orderId) {
+      return new Response(JSON.stringify({ ok: false, error: "Bestellnummer erforderlich" }), { status: 400, headers: { "Content-Type": "application/json" } });
+    }
+
+    const updatedOrder = updateOrder(orderId, updates);
+    if (!updatedOrder) {
+      return new Response(JSON.stringify({ ok: false, error: "Bestellung nicht gefunden" }), { status: 404, headers: { "Content-Type": "application/json" } });
+    }
+
+    return new Response(JSON.stringify({ ok: true, order: updatedOrder }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (e) {
+    return new Response(JSON.stringify({ ok: false, error: "Ungültige Anfrage" }), { status: 400, headers: { "Content-Type": "application/json" } });
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const url = new URL(request.url);
+    const orderId = url.searchParams.get('orderId');
+
+    if (!orderId) {
+      return new Response(JSON.stringify({ ok: false, error: "Bestellnummer erforderlich" }), { status: 400, headers: { "Content-Type": "application/json" } });
+    }
+
+    const deletedOrder = deleteOrder(orderId);
+    if (!deletedOrder) {
+      return new Response(JSON.stringify({ ok: false, error: "Bestellung nicht gefunden" }), { status: 404, headers: { "Content-Type": "application/json" } });
+    }
+
+    return new Response(JSON.stringify({ ok: true, message: "Bestellung gelöscht" }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (e) {
+    return new Response(JSON.stringify({ ok: false, error: "Ungültige Anfrage" }), { status: 400, headers: { "Content-Type": "application/json" } });
   }
 }
