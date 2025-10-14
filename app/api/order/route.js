@@ -2,9 +2,7 @@ import { sendOrderConfirmation } from "@/app/lib/mailer";
 import { saveOrder, getOrders, getOrderStats } from "@/app/lib/orders";
 
 function generateOrderId() {
-  const ts = Date.now().toString(36).toUpperCase();
-  const rand = Math.random().toString(36).slice(2, 7).toUpperCase();
-  return `TY-${ts}-${rand}`;
+  return Math.floor(10000 + Math.random() * 90000).toString();
 }
 
 export async function POST(request) {

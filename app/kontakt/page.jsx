@@ -34,19 +34,18 @@ export default function KontaktPage() {
       <section className="hero">
         <div>
           <h1 className="hero-title">Kontakt</h1>
-          <p className="hero-subtitle">Wir sind für dich da – per Formular, E‑Mail oder Telefon.</p>
+          <p className="hero-subtitle">Wir sind für dich da – per Formular oder E‑Mail.</p>
           <div className="hero-cta">
-            <a href="mailto:hello@tamilyouth.ch" className="button"><IconMail />E‑Mail</a>
-            <a href="tel:+41761234567" className="button secondary"><IconPhone />Anrufen</a>
+            <a href="mailto:tamilyouth1991@gmail.com" className="button"><IconMail />E‑Mail</a>
+            <a href="https://instagram.com/TYSG1991" className="button secondary" target="_blank" rel="noreferrer">Instagram</a>
           </div>
         </div>
         <div className="soft">
           <div style={{ padding: 16 }}>
-            <h3 style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}><IconMapPin /> Öffnungszeiten & Standort</h3>
-            <p className="product-meta">Mo–Sa: 11:00–21:00 • So: 12:00–20:00</p>
-            <p className="product-meta">Musterstraße 1, 8000 Zürich</p>
+            <h3 style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}><IconMapPin /> Standort</h3>
+            <p className="product-meta">Parkstrasse 2, 9000 St. Gallen</p>
             <div style={{ marginTop: 12 }}>
-              <a className="button secondary" href="https://maps.google.com" target="_blank" rel="noreferrer">Route planen</a>
+              <a className="button secondary" href="https://maps.google.com/maps?q=Parkstrasse+2,+9000+St.+Gallen" target="_blank" rel="noreferrer">Route planen</a>
             </div>
           </div>
         </div>
@@ -79,23 +78,6 @@ export default function KontaktPage() {
                 {status.state === "loading" ? "Senden..." : "Nachricht senden"}
               </button>
             </form>
-          </div>
-        </div>
-        <div className="soft">
-          <div style={{ padding: 16 }}>
-            <h3 style={{ marginBottom: 10 }}>Folge uns</h3>
-            <div className="grid" style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
-              <a className="tile" href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a>
-              <a className="tile" href="https://facebook.com" target="_blank" rel="noreferrer">Facebook</a>
-              <a className="tile" href="https://tiktok.com" target="_blank" rel="noreferrer">TikTok</a>
-              <a className="tile" href="https://whatsapp.com" target="_blank" rel="noreferrer">WhatsApp</a>
-            </div>
-            <div className="section">
-              <h3 style={{ marginBottom: 8 }}>Karte</h3>
-              <div className="elevated" style={{ borderRadius: 12, overflow: "hidden", border: "1px solid var(--border)", background: "#ecfeff", height: 220, display: "grid", placeItems: "center", color: "#334155" }}>
-                Karte/Map-Embed Platzhalter
-              </div>
-            </div>
           </div>
         </div>
       </section>

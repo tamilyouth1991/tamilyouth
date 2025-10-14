@@ -11,39 +11,32 @@ import "./kaufen.css";
 
 const CATALOG = [
   { 
-    id: "kottu", 
-    name: "Kottu Rotti", 
-    price: 14, 
-    desc: "Klassischer Street‑Food Favorit mit frischen Zutaten",
-    category: "Hauptgericht"
+    id: "vegi-kotthurotti", 
+    name: "Vegi Kotthurotti", 
+    price: 12, 
+    desc: "Fein gehacktes Roti mit frischem Gemüse.",
+    category: "Vegan"
   },
   { 
-    id: "veggie-kottu", 
-    name: "Veggie Kottu Rotti", 
-    price: 13, 
-    desc: "Vegetarische Variante, frisch und würzig",
-    category: "Vegetarisch"
-  },
-  { 
-    id: "rolls", 
-    name: "Rolls (2 Stk)", 
-    price: 8, 
-    desc: "Knusprige Teigröllchen, 2 Stück",
-    category: "Snack"
-  },
-  { 
-    id: "biryani", 
-    name: "Chicken Biryani", 
+    id: "kotthurotti", 
+    name: "Kotthurotti", 
     price: 15, 
-    desc: "Aromatischer Reis mit Hühnchen",
-    category: "Hauptgericht"
+    desc: "Klassisches Kotthurotti mit Fleisch.",
+    category: "Beliebt"
   },
   { 
-    id: "mutton-curry", 
-    name: "Mutton Curry", 
-    price: 17, 
-    desc: "Zartes Lamm in würziger Sauce",
-    category: "Hauptgericht"
+    id: "cola-dose", 
+    name: "Cola Dose", 
+    price: 3.5, 
+    desc: "Erfrischende Cola Dose.",
+    category: "Getränk"
+  },
+  { 
+    id: "eistee-dose", 
+    name: "Eistee Dose", 
+    price: 3.5, 
+    desc: "Süßer Eistee zum Essen.",
+    category: "Getränk"
   },
 ];
 
