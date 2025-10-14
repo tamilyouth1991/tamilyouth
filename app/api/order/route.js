@@ -63,8 +63,8 @@ export async function POST(request) {
 
     const orderId = generateOrderId();
 
-    // Persist lightweight
-    saveOrder({ orderId, items, delivery, customer, subtotal, deliveryFee, total });
+    // Save to Firestore
+    const savedOrder = await saveOrder({ orderId, items, delivery, customer, subtotal, deliveryFee, total });
 
     // Try sending confirmation email
     try {
@@ -101,14 +101,14 @@ export async function GET(request) {
     let list, stats;
     
     if (grouped) {
-      list = getOrdersGroupedByPostalCode();
-      stats = getOrderStats();
+      list = await getOrdersGroupedByPostalCode();
+      stats = await getOrderStats();
     } else if (postalCode) {
-      list = getOrdersByPostalCode(postalCode);
-      stats = getOrderStats();
+      list = await getOrdersByPostalCode(postalCode);
+      stats = await getOrderStats();
     } else {
-      list = getOrders();
-      stats = getOrderStats();
+      list = await getOrders();
+      stats = await getOrderStats();
     }
     
     return new Response(JSON.stringify({ ok: true, orders: list, stats }), { status: 200, headers: { "Content-Type": "application/json" } });
@@ -126,7 +126,7 @@ export async function PUT(request) {
       return new Response(JSON.stringify({ ok: false, error: "Bestellnummer erforderlich" }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    const updatedOrder = updateOrder(orderId, updates);
+    const updatedOrder = await updateOrder(orderId, updates);
     if (!updatedOrder) {
       return new Response(JSON.stringify({ ok: false, error: "Bestellung nicht gefunden" }), { status: 404, headers: { "Content-Type": "application/json" } });
     }
@@ -146,7 +146,7 @@ export async function DELETE(request) {
       return new Response(JSON.stringify({ ok: false, error: "Bestellnummer erforderlich" }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    const deletedOrder = deleteOrder(orderId);
+    const deletedOrder = await deleteOrder(orderId);
     if (!deletedOrder) {
       return new Response(JSON.stringify({ ok: false, error: "Bestellung nicht gefunden" }), { status: 404, headers: { "Content-Type": "application/json" } });
     }
