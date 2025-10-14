@@ -97,9 +97,9 @@ export default function Header() {
       {open && (
         <div className="mobile-nav-panel" ref={panelRef}>
           <nav className="mobile-nav">
-            <Link href="/" onClick={() => setOpen(false)}>🏠 Home</Link>
-            <Link href="/kaufen" onClick={() => setOpen(false)}>🍽️ Kotthurotti</Link>
-            <Link href="/kontakt" onClick={() => setOpen(false)}>📞 Kontakt</Link>
+            <Link href="/" onClick={() => setOpen(false)}>Home</Link>
+            <Link href="/kaufen" onClick={() => setOpen(false)}>Kotthurotti</Link>
+            <Link href="/kontakt" onClick={() => setOpen(false)}>Kontakt</Link>
             {user && (isAdmin || isManagement) && (
               <Link href="/bestellungen" onClick={() => setOpen(false)}>Bestellungen</Link>
             )}
