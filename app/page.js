@@ -6,7 +6,6 @@ import "./homepage.css";
 
 export default function Home() {
   const products = [
-    { name: "Vegi Kotthurotti", price: "CHF 10.00", desc: "Fein gehacktes Roti mit frischem Gemüse.", tag: "Vegan" },
     { name: "Kotthurotti", price: "CHF 12.00", desc: "Klassisches Kotthurotti mit Fleisch.", tag: "Beliebt" },
     { name: "Cola Dose", price: "CHF 3.50", desc: "Erfrischende Cola Dose.", tag: "Getränk" },
     { name: "Eistee Dose", price: "CHF 3.50", desc: "Süßer Eistee zum Essen.", tag: "Getränk" },
@@ -64,12 +63,12 @@ export default function Home() {
               />
             </div>
 
-            {/* Registration Section */}
+            {/* Order Section */}
             <div className="registration-section">
-              <div className="register-call">
-                <div className="register-label">REGISTER</div>
-                <div className="register-action">NOW!</div>
-              </div>
+              <Link href="/kaufen" className="order-call">
+                <div className="register-label">JETZT</div>
+                <div className="register-action">BESTELLEN!</div>
+              </Link>
               <div className="venue-info">
                 <div className="venue-name">ATHLETIKZENTRUM SG</div>
                 <div className="venue-address">PARKSTRASSE 2, 9000 ST. GALLEN</div>
@@ -89,32 +88,38 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="support-info">
-            <div className="support-card scroll-slide-left scroll-delay-1">
-              <div className="support-icon">
-                <IconTruck />
+          {/* Einheitliche Info-Linie */}
+          <div className="unified-info-container scroll-fade-in scroll-delay-2">
+            <div className="unified-info-card">
+              <div className="info-section">
+                <div className="info-icon">
+                  <IconTruck />
+                </div>
+                <div className="info-text">
+                  <h3>Jubiläums-Turnier</h3>
+                  <p>35 Jahre FC Tamil Youth St. Gallen</p>
+                </div>
               </div>
-              <div className="support-text">
-                <h3>Jubiläums-Turnier</h3>
-                <p>35 Jahre FC Tamil Youth St. Gallen</p>
+              
+              <div className="info-section">
+                <div className="info-icon">
+                  <IconMapPin />
+                </div>
+                <div className="info-text">
+                  <h3>Athletikzentrum SG</h3>
+                  <p>Parkstrasse 2, 9000 St. Gallen</p>
+                </div>
               </div>
-            </div>
-            <div className="support-card scroll-fade-in scroll-delay-2">
-              <div className="support-icon">
-                <IconMapPin />
-              </div>
-              <div className="support-text">
-                <h3>Athletikzentrum SG</h3>
-                <p>Parkstrasse 2, 9000 St. Gallen</p>
-              </div>
-            </div>
-            <div className="support-card scroll-slide-right scroll-delay-3">
-              <div className="support-icon">
-                <IconCart />
-              </div>
-              <div className="support-text">
-                <h3>Preisgeld</h3>
-                <p>CHF 1000.- zu gewinnen</p>
+              
+              <div className="info-section highlight">
+                <div className="info-icon">
+                  <span className="party-emoji">🎉</span>
+                </div>
+                <div className="info-text">
+                  <h3>Komm vorbei!</h3>
+                  <p>Feiere mit uns 35 Jahre Tradition</p>
+                  <p className="event-date">2. November 2025 • 8:00 Uhr</p>
+                </div>
               </div>
             </div>
           </div>
@@ -140,7 +145,7 @@ export default function Home() {
               <div className="step-number">1</div>
               <div className="step-content">
                 <h3>Wähle deine Gerichte</h3>
-                <p>Vegi oder normales Kotthurotti, Getränke nach Wahl</p>
+                <p>Kotthurotti und Getränke nach Wahl</p>
               </div>
             </div>
             <div className="step scroll-fade-in scroll-delay-2">
@@ -163,21 +168,16 @@ export default function Home() {
             <h3>Preisübersicht</h3>
             <div className="pricing-grid">
               <div className="pricing-card scroll-scale-in scroll-delay-1">
-                <div className="quantity">Veggi Kotthu</div>
-                <div className="price">CHF 10.- (Abholung)</div>
-                <div className="price">CHF 14.- (Lieferung)</div>
-              </div>
-              <div className="pricing-card scroll-scale-in scroll-delay-2">
-                <div className="quantity">Normaler Kotthu</div>
+                <div className="quantity">Kotthu</div>
                 <div className="price">CHF 12.- (Abholung)</div>
                 <div className="price">CHF 16.- (Lieferung)</div>
               </div>
-              <div className="pricing-card scroll-scale-in scroll-delay-3">
+              <div className="pricing-card scroll-scale-in scroll-delay-2">
                 <div className="quantity">2 Gerichte</div>
                 <div className="price">CHF 20.- (Abholung)</div>
                 <div className="price">CHF 25.- (Lieferung)</div>
               </div>
-              <div className="pricing-card scroll-scale-in scroll-delay-4">
+              <div className="pricing-card scroll-scale-in scroll-delay-3">
                 <div className="quantity">Jedes weitere Gericht</div>
                 <div className="price">CHF 10.- (Abholung)</div>
                 <div className="price">CHF 12.- (Lieferung)</div>

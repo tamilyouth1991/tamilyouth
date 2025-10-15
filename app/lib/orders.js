@@ -142,7 +142,6 @@ export async function getOrderStats() {
     
     // Item breakdown
     const itemBreakdown = {
-      'Vegi Kotthurotti': 0,
       'Kotthurotti': 0,
       'Cola Dose': 0,
       'Eistee Dose': 0

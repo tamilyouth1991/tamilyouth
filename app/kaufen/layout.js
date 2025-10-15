@@ -1,10 +1,10 @@
 export const metadata = {
   title: "Kotthurotti bestellen - FC Tamil Youth St. Gallen 1991 | Authentisches Sri Lanka Essen",
-  description: "Bestelle jetzt authentisches Kotthurotti beim FC Tamil Youth St. Gallen 1991. Vegi & Fleisch Optionen, Lieferung möglich. Unterstütze unser Jubiläums-Hallenturnier. Kottu Rotti, Biryani, Rolls - alles frisch zubereitet.",
-  keywords: "Kotthurotti bestellen, Kottu Rotti, Sri Lanka Essen, Tamil Youth St. Gallen, authentisches Essen, Vegi Kotthurotti, Lieferung, Hallenturnier, Jubiläum, Athletikzentrum SG",
+  description: "Bestelle jetzt authentisches Kotthurotti beim FC Tamil Youth St. Gallen 1991. Lieferung möglich. Unterstütze unser Jubiläums-Hallenturnier. Kottu Rotti, Biryani, Rolls - alles frisch zubereitet.",
+  keywords: "Kotthurotti bestellen, Kottu Rotti, Sri Lanka Essen, Tamil Youth St. Gallen, authentisches Essen, Lieferung, Hallenturnier, Jubiläum, Athletikzentrum SG",
   openGraph: {
     title: "Kotthurotti bestellen - FC Tamil Youth St. Gallen 1991",
-    description: "Bestelle authentisches Kotthurotti und unterstütze unser Jubiläums-Hallenturnier. Vegi & Fleisch Optionen verfügbar.",
+    description: "Bestelle authentisches Kotthurotti und unterstütze unser Jubiläums-Hallenturnier.",
     url: 'https://tamilyouth.ch/kaufen',
     images: [
       {
