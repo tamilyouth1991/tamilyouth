@@ -836,7 +836,7 @@ body {
 @media (min-width: 768px) {
   .section-title {
     font-size: 2rem;
-    text-align: left;
+    text-align: center;
   }
   
   .feature-tile {
@@ -1158,6 +1158,7 @@ body {
 .section-title {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   font-size: 1.5rem;
   font-weight: 800;
