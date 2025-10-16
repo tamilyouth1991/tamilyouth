@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "FC Tamil Youth St. Gallen 1991 - Kotthurotti Bestellung & Hallenturnier",
-  description: "Bestelle authentisches Kotthurotti beim FC Tamil Youth St. Gallen 1991. Unterstütze unser 35-jähriges Jubiläums-Hallenturnier am 2. November 2025. Vegi & Fleisch Optionen, Lieferung möglich. Athletikzentrum SG, Parkstrasse 2, St. Gallen.",
-  keywords: "Kotthurotti, Tamil Youth, St. Gallen, Hallenturnier, Fußball, Sri Lanka Essen, authentisches Essen, Vegi Kotthurotti, Bestellung, Lieferung, Athletikzentrum SG, Jubiläum, 35 Jahre, FC Tamil Youth",
+  description: "Bestelle authentisches Kotthurotti beim FC Tamil Youth St. Gallen 1991. Unterstütze unser 35-jähriges Jubiläums-Hallenturnier am 2. November 2025. Lieferung möglich. Athletikzentrum SG, Parkstrasse 2, St. Gallen.",
+  keywords: "Kotthurotti, Tamil Youth, St. Gallen, Hallenturnier, Fußball, Sri Lanka Essen, authentisches Essen, Bestellung, Lieferung, Athletikzentrum SG, Jubiläum, 35 Jahre, FC Tamil Youth",
   authors: [{ name: "FC Tamil Youth St. Gallen 1991" }],
   creator: "FC Tamil Youth St. Gallen 1991",
   publisher: "FC Tamil Youth St. Gallen 1991",
@@ -35,7 +35,7 @@ export const metadata = {
   },
   openGraph: {
     title: "FC Tamil Youth St. Gallen 1991 - Kotthurotti Bestellung",
-    description: "Bestelle authentisches Kotthurotti und unterstütze unser 35-jähriges Jubiläums-Hallenturnier. Vegi & Fleisch Optionen, Lieferung möglich.",
+    description: "Bestelle authentisches Kotthurotti und unterstütze unser 35-jähriges Jubiläums-Hallenturnier. Lieferung möglich.",
     url: 'https://tamilyouth.ch',
     siteName: 'FC Tamil Youth St. Gallen 1991',
     images: [
@@ -113,16 +113,6 @@ export default function RootLayout({ children }) {
           },
           "price": "15.00",
           "priceCurrency": "CHF"
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Product",
-            "name": "Vegi Kotthurotti",
-            "description": "Vegetarisches Kotthurotti mit frischem Gemüse"
-          },
-          "price": "12.00",
-          "priceCurrency": "CHF"
         }
       ]
     },
@@ -198,7 +188,6 @@ export default function RootLayout({ children }) {
                   <div className="footer-section">
                     <h4>Essen</h4>
                     <p>Authentisches Kotthurotti</p>
-                    <p>Vegi & Fleisch Optionen</p>
                     <p>Frische Getränke</p>
                     <p><strong>Sri Lanka Street Food</strong></p>
                   </div>

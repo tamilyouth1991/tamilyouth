@@ -11,13 +11,6 @@ import "./kaufen.css";
 
 const CATALOG = [
   { 
-    id: "vegi-kotthurotti", 
-    name: "Vegi Kotthurotti", 
-    price: 10, 
-    desc: "Fein gehacktes Roti mit frischem Gemüse.",
-    category: "Vegan"
-  },
-  { 
     id: "kotthurotti", 
     name: "Kotthurotti", 
     price: 12, 
@@ -135,7 +128,7 @@ function KaufenPageContent() {
 
   // Complex pricing logic based on new policy
   const subtotal = useMemo(() => {
-    const kotthuItems = cart.filter(p => p.id === "vegi-kotthurotti" || p.id === "kotthurotti");
+    const kotthuItems = cart.filter(p => p.id === "kotthurotti");
     const drinkItems = cart.filter(p => p.id === "cola-dose" || p.id === "eistee-dose");
     
     let total = 0;
@@ -144,10 +137,8 @@ function KaufenPageContent() {
     const totalKotthuCount = kotthuItems.reduce((sum, p) => sum + p.quantity, 0);
     
     if (totalKotthuCount === 1) {
-      // Single kotthu: veggi = 10, normal = 12
-      const veggiCount = kotthuItems.find(p => p.id === "vegi-kotthurotti")?.quantity || 0;
-      const normalCount = kotthuItems.find(p => p.id === "kotthurotti")?.quantity || 0;
-      total += veggiCount * 10 + normalCount * 12;
+      // Single kotthu: 12 CHF
+      total += totalKotthuCount * 12;
     } else if (totalKotthuCount === 2) {
       // Two kotthu items: 20 CHF total
       total += 20;
@@ -168,7 +159,7 @@ function KaufenPageContent() {
   const deliveryFee = useMemo(() => {
     if (!deliveryEnabled) return 0;
     
-    const kotthuItems = cart.filter(p => p.id === "vegi-kotthurotti" || p.id === "kotthurotti");
+    const kotthuItems = cart.filter(p => p.id === "kotthurotti");
     const totalKotthuCount = kotthuItems.reduce((sum, p) => sum + p.quantity, 0);
     
     if (totalKotthuCount === 1) {

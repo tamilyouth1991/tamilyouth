@@ -11,7 +11,7 @@
 ### 2. **Strukturierte Daten (JSON-LD)**
 - SportsTeam Schema für den Fußballverein
 - Lokale Geschäftsdaten (Athletikzentrum SG)
-- Produktangebote (Kotthurotti, Vegi Optionen)
+- Produktangebote (Kotthurotti)
 - Veranstaltungsdaten (Jubiläums-Hallenturnier)
 - Preise und Kontaktinformationen
 
@@ -44,7 +44,6 @@
 - Athletikzentrum SG
 
 **Sekundäre Keywords:**
-- Vegi Kotthurotti
 - Tamilischer Fußballverein
 - Jubiläums-Turnier
 - Parkstrasse 2 St. Gallen
