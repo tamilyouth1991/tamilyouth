@@ -180,7 +180,6 @@ export async function getOrderStats() {
       completedOrders: 0,
       cancelledOrders: 0,
       itemBreakdown: {
-        'Vegi Kotthurotti': 0,
         'Kotthurotti': 0,
         'Cola Dose': 0,
         'Eistee Dose': 0

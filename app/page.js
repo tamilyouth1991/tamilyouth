@@ -101,16 +101,6 @@ export default function Home() {
                 </div>
               </div>
               
-              <div className="info-section">
-                <div className="info-icon">
-                  <IconMapPin />
-                </div>
-                <div className="info-text">
-                  <h3>Athletikzentrum SG</h3>
-                  <p>Parkstrasse 2, 9000 St. Gallen</p>
-                </div>
-              </div>
-              
               <div className="info-section highlight">
                 <div className="info-icon">
                   <span className="party-emoji">🎉</span>
@@ -119,6 +109,16 @@ export default function Home() {
                   <h3>Komm vorbei!</h3>
                   <p>Feiere mit uns 35 Jahre Tradition</p>
                   <p className="event-date">2. November 2025 • 8:00 Uhr</p>
+                </div>
+              </div>
+              
+              <div className="info-section">
+                <div className="info-icon">
+                  <IconMapPin />
+                </div>
+                <div className="info-text">
+                  <h3>Athletikzentrum SG</h3>
+                  <p>Parkstrasse 2, 9000 St. Gallen</p>
                 </div>
               </div>
             </div>
