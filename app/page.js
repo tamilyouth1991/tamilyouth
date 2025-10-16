@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { IconCart, IconTruck, IconPhone, IconMapPin } from "./components/Icons";
 import ScrollAnimations from "./components/ScrollAnimations";
+import Countdown from "./components/Countdown";
 import "./homepage.css";
 
 export default function Home() {
@@ -43,6 +44,11 @@ export default function Home() {
               <div className="celebration-years">35 YEARS</div>
               <div className="club-title">TYSG 1991</div>
               <div className="club-motto">ONE TEAM. ONE SPIRIT.</div>
+            </div>
+
+            {/* Countdown Section */}
+            <div className="countdown-section">
+              <Countdown />
             </div>
 
             {/* Game Day Banner */}
