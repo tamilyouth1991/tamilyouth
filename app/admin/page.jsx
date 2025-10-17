@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { useAuth } from "@/app/components/AuthProvider";
 import { getFirebaseDb } from "@/app/lib/firebase";
-import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, setDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +21,12 @@ export default function AdminPage() {
   useEffect(() => {
     if (loading) return;
     if (!user || !isAdmin) return;
+    
+    // Debug: Log admin status
+    console.log("User:", user);
+    console.log("Is Admin:", isAdmin);
+    console.log("User email:", user.email);
+    
     loadUsers({ initial: true });
   }, [user, loading, isAdmin]);
 
@@ -30,14 +37,23 @@ export default function AdminPage() {
       } else {
         setRefreshing(true);
       }
-      const db = getFirebaseDb();
-      const ref = collection(db, "profiles");
-      const q = query(ref, orderBy("email"));
-      const snap = await getDocs(q);
-      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      setUsers(list);
+      
+      // Verwende die API-Route um Benutzer zu laden
+      const response = await fetch('/api/admin/users');
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Fehler beim Laden der Benutzer');
+      }
+      
+      // Debug: Log the users to console
+      console.log("Loaded users:", data.users);
+      console.log("Number of users:", data.count);
+      
+      setUsers(data.users);
       setStatus({ state: "idle", message: "" });
     } catch (e) {
+      console.error("Error loading users:", e);
       setStatus({ state: "error", message: e.message || "Fehler beim Laden der Benutzer" });
     } finally {
       if (initial) setLoadingUsers(false);
@@ -86,7 +102,12 @@ export default function AdminPage() {
 
   if (loading) return <div className="section"><div className="tile">Laden...</div></div>;
   if (!user) return <div className="section"><div className="tile">Bitte zuerst einloggen.</div></div>;
-  if (!isAdmin) return <div className="section"><div className="tile">Kein Zugriff - Nur für Administratoren</div></div>;
+  if (!isAdmin) {
+    console.log("Access denied - User is not admin");
+    console.log("User email:", user?.email);
+    console.log("Is admin:", isAdmin);
+    return <div className="section"><div className="tile">Kein Zugriff - Nur für Administratoren</div></div>;
+  }
 
   return (
     <div className="section" style={{ position: "relative" }}>
@@ -108,7 +129,7 @@ export default function AdminPage() {
 
       <div className="section">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 16 }}>
-          <h2>Benutzerverwaltung</h2>
+          <h2>Benutzerverwaltung ({users.length} Benutzer)</h2>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             {refreshing && <span className="product-meta">Aktualisiere…</span>}
             <button className="button" onClick={() => loadUsers()}>Aktualisieren</button>
@@ -180,7 +201,9 @@ function UserCard({ user, onUpdateRole, onDeleteUser, currentUserId, allowSelfCh
     <div className="tile" style={{ display: "grid", gap: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
-          <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>{user.name || "Kein Name"}</div>
+          <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>
+            {user.name || "Kein Name"}
+          </div>
           <div className="product-meta">{user.email}</div>
           {user.phone && <div className="product-meta">Tel: {user.phone}</div>}
         </div>
