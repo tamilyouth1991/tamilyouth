@@ -40,8 +40,13 @@ function KaufenPageContent() {
   const router = useRouter();
 
   const [cart, setCart] = useState([]);
-  const [deliveryEnabled, setDeliveryEnabled] = useState(false);
-  const [address, setAddress] = useState("");
+  const [deliveryOption, setDeliveryOption] = useState(null); // null, "pickup", or "delivery"
+  const [address, setAddress] = useState({
+    street: "",
+    houseNumber: "",
+    city: "",
+    postalCode: ""
+  });
   const [customer, setCustomer] = useState({ name: "", phone: "", email: "" });
   const [status, setStatus] = useState({ state: "idle", message: "" });
   const [orderId, setOrderId] = useState("");
@@ -55,8 +60,13 @@ function KaufenPageContent() {
       const saved = JSON.parse(localStorage.getItem("ty_cart_state") || "null");
       if (saved) {
         setCart(saved.cart || []);
-        setDeliveryEnabled(Boolean(saved.deliveryEnabled));
-        setAddress(saved.address || "");
+        setDeliveryOption(saved.deliveryOption || null);
+        setAddress(saved.address || {
+          street: "",
+          houseNumber: "",
+          city: "",
+          postalCode: ""
+        });
         setCustomer(saved.customer || { name: "", phone: "", email: "" });
       }
     } catch {}
@@ -69,9 +79,9 @@ function KaufenPageContent() {
 
   useEffect(() => {
     // Persist minimal state
-    const data = { cart, deliveryEnabled, address, customer };
+    const data = { cart, deliveryOption, address, customer };
     try { localStorage.setItem("ty_cart_state", JSON.stringify(data)); } catch {}
-  }, [cart, deliveryEnabled, address, customer]);
+  }, [cart, deliveryOption, address, customer]);
 
   // Prefill customer from saved profile or Firebase user
   useEffect(() => {
@@ -157,7 +167,7 @@ function KaufenPageContent() {
   
   // Delivery fee: +4 CHF for single kotthu, +5 CHF for two kotthu, +2 CHF for each additional kotthu
   const deliveryFee = useMemo(() => {
-    if (!deliveryEnabled) return 0;
+    if (deliveryOption !== "delivery") return 0;
     
     const kotthuItems = cart.filter(p => p.id === "kotthurotti");
     const totalKotthuCount = kotthuItems.reduce((sum, p) => sum + p.quantity, 0);
@@ -171,12 +181,20 @@ function KaufenPageContent() {
     }
     
     return 0;
-  }, [cart, deliveryEnabled]);
+  }, [cart, deliveryOption]);
   
   const total = subtotal + deliveryFee;
 
   function updateCustomer(field, value) {
     setCustomer((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function updateAddress(field, value) {
+    setAddress((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function closeStatusMessage() {
+    setStatus({ state: "idle", message: "" });
   }
 
   async function checkout(e) {
@@ -192,9 +210,22 @@ function KaufenPageContent() {
       return;
     }
     
-    if (deliveryEnabled && !address) {
-      setStatus({ state: "error", message: "Adresse für Lieferung erforderlich." });
+    if (!deliveryOption) {
+      setStatus({ state: "error", message: "Bitte wähle Abholung oder Lieferung aus." });
       return;
+    }
+    
+    if (deliveryOption === "delivery") {
+      if (!address.street || !address.houseNumber || !address.city || !address.postalCode) {
+        setStatus({ state: "error", message: "Bitte fülle alle Adressfelder aus." });
+        return;
+      }
+      
+      // Postleitzahl validieren (Schweiz: 4 Ziffern)
+      if (!/^\d{4}$/.test(address.postalCode)) {
+        setStatus({ state: "error", message: "Bitte gib eine gültige Postleitzahl ein (4 Ziffern)." });
+        return;
+      }
     }
 
     // Basic validation
@@ -217,7 +248,12 @@ function KaufenPageContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: cart,
-          delivery: { enabled: deliveryEnabled, address },
+          delivery: { 
+            enabled: deliveryOption === "delivery", 
+            address: deliveryOption === "delivery" 
+              ? `${address.street} ${address.houseNumber}, ${address.postalCode} ${address.city}`
+              : ""
+          },
           customer,
         }),
       });
@@ -402,28 +438,103 @@ function KaufenPageContent() {
 
                 {/* Delivery Options */}
                 <div className="delivery-section">
-                  <div className="delivery-toggle">
-                    <input 
-                      id="delivery" 
-                      type="checkbox" 
-                      checked={deliveryEnabled} 
-                      onChange={(e) => setDeliveryEnabled(e.target.checked)}
-                      className="delivery-checkbox"
-                    />
-                    <label htmlFor="delivery" className="delivery-label">
-                      <IconTruck size={20} />
-                      <span>Lieferung (siehe Preisübersicht)</span>
-                    </label>
+                  <h3 className="section-subtitle">Versandoption wählen</h3>
+                  
+                  <div className="delivery-options">
+                    <div className="delivery-option">
+                      <input 
+                        id="pickup" 
+                        type="radio" 
+                        name="deliveryOption"
+                        value="pickup"
+                        checked={deliveryOption === "pickup"} 
+                        onChange={(e) => setDeliveryOption(e.target.value)}
+                        className="delivery-radio"
+                      />
+                      <label htmlFor="pickup" className="delivery-label">
+                        <div className="option-icon">
+                          <IconMapPin size={24} />
+                        </div>
+                        <div className="option-content">
+                          <div className="option-title">Abholung</div>
+                          <div className="option-subtitle">Kostenlos • Athletikzentrum SG</div>
+                        </div>
+                      </label>
+                    </div>
+                    
+                    <div className="delivery-option">
+                      <input 
+                        id="delivery" 
+                        type="radio" 
+                        name="deliveryOption"
+                        value="delivery"
+                        checked={deliveryOption === "delivery"} 
+                        onChange={(e) => setDeliveryOption(e.target.value)}
+                        className="delivery-radio"
+                      />
+                      <label htmlFor="delivery" className="delivery-label">
+                        <div className="option-icon">
+                          <IconTruck size={24} />
+                        </div>
+                        <div className="option-content">
+                          <div className="option-title">Lieferung</div>
+                          <div className="option-subtitle">Siehe Preisübersicht</div>
+                        </div>
+                      </label>
+                    </div>
                   </div>
                   
-                  {deliveryEnabled && (
-                    <div className="address-input">
-                      <input 
-                        className="input" 
-                        placeholder="Lieferadresse eingeben" 
-                        value={address} 
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
+                  {deliveryOption === "delivery" && (
+                    <div className="address-form">
+                      <h4 className="address-form-title">Lieferadresse</h4>
+                      <div className="address-fields">
+                        <div className="address-field-group">
+                          <div className="address-field">
+                            <label htmlFor="street" className="address-label">Straße</label>
+                            <input 
+                              id="street"
+                              className="address-input" 
+                              placeholder="z.B. Musterstraße" 
+                              value={address.street} 
+                              onChange={(e) => updateAddress("street", e.target.value)}
+                            />
+                          </div>
+                          <div className="address-field">
+                            <label htmlFor="houseNumber" className="address-label">Hausnummer</label>
+                            <input 
+                              id="houseNumber"
+                              className="address-input" 
+                              placeholder="z.B. 123" 
+                              value={address.houseNumber} 
+                              onChange={(e) => updateAddress("houseNumber", e.target.value)}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="address-field-group">
+                          <div className="address-field">
+                            <label htmlFor="postalCode" className="address-label">Postleitzahl</label>
+                            <input 
+                              id="postalCode"
+                              className="address-input" 
+                              placeholder="z.B. 9000" 
+                              value={address.postalCode} 
+                              onChange={(e) => updateAddress("postalCode", e.target.value)}
+                              maxLength="4"
+                            />
+                          </div>
+                          <div className="address-field">
+                            <label htmlFor="city" className="address-label">Ort</label>
+                            <input 
+                              id="city"
+                              className="address-input" 
+                              placeholder="z.B. St. Gallen" 
+                              value={address.city} 
+                              onChange={(e) => updateAddress("city", e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -473,8 +584,8 @@ function KaufenPageContent() {
                     <span>{formatChf(subtotal)}</span>
                   </div>
                   <div className="summary-row">
-                    <span>Lieferung</span>
-                    <span>{deliveryEnabled ? formatChf(deliveryFee) : "Gratis"}</span>
+                    <span>{deliveryOption === "delivery" ? "Lieferung" : deliveryOption === "pickup" ? "Abholung" : "Versand"}</span>
+                    <span>{deliveryOption === "delivery" ? formatChf(deliveryFee) : deliveryOption === "pickup" ? "Gratis" : "-"}</span>
                   </div>
                   <div className="summary-row total">
                     <span>Gesamt</span>
@@ -518,14 +629,23 @@ function KaufenPageContent() {
 
       {/* Status Toast */}
       {status.state !== "idle" && (
-        <div className="status-toast">
+        <div className="status-toast-container">
           <div className={`status-toast ${status.state}`}>
-            <div className="status-icon">
-              {status.state === "loading" && <div className="loading-spinner" />}
-              {status.state === "error" && <span style={{ color: "#ef4444" }}>!</span>}
-              {status.state === "success" && <span style={{ color: "#10b981" }}>✓</span>}
+            <div className="status-content">
+              <div className="status-icon">
+                {status.state === "loading" && <div className="loading-spinner" />}
+                {status.state === "error" && <span className="error-icon">!</span>}
+                {status.state === "success" && <span className="success-icon">✓</span>}
+              </div>
+              <span className="status-message">{status.message}</span>
             </div>
-            <span className="status-message">{status.message}</span>
+            <button 
+              className="status-close-btn" 
+              onClick={closeStatusMessage}
+              aria-label="Nachricht schließen"
+            >
+              ×
+            </button>
           </div>
         </div>
       )}
