@@ -186,11 +186,74 @@ function KaufenPageContent() {
   const total = subtotal + deliveryFee;
 
   function updateCustomer(field, value) {
-    setCustomer((prev) => ({ ...prev, [field]: value }));
+    if (field === "phone") {
+      // Formatiere die Telefonnummer automatisch
+      const formatted = formatPhoneNumber(value);
+      setCustomer((prev) => ({ ...prev, [field]: formatted }));
+    } else {
+      setCustomer((prev) => ({ ...prev, [field]: value }));
+    }
   }
 
   function updateAddress(field, value) {
     setAddress((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function formatPhoneNumber(phone) {
+    // Entferne alle nicht-numerischen Zeichen außer +
+    let cleaned = phone.replace(/[^\d+]/g, '');
+    
+    // Entferne führende Nullen
+    cleaned = cleaned.replace(/^0+/, '');
+    
+    // Wenn mit +41 beginnt, behalte es
+    if (cleaned.startsWith('+41')) {
+      cleaned = cleaned.substring(3);
+    }
+    // Wenn mit 41 beginnt, entferne es
+    else if (cleaned.startsWith('41')) {
+      cleaned = cleaned.substring(2);
+    }
+    
+    // Stelle sicher, dass wir mindestens 9 Ziffern haben
+    if (cleaned.length < 9) {
+      return phone; // Gib ursprüngliche Eingabe zurück wenn zu kurz
+    }
+    
+    // Formatierung: +41 76 123 45 67
+    if (cleaned.length === 9) {
+      return `+41 ${cleaned.substring(0, 2)} ${cleaned.substring(2, 5)} ${cleaned.substring(5, 7)} ${cleaned.substring(7)}`;
+    } else if (cleaned.length === 10) {
+      return `+41 ${cleaned.substring(0, 2)} ${cleaned.substring(2, 5)} ${cleaned.substring(5, 7)} ${cleaned.substring(7)}`;
+    }
+    
+    return phone; // Gib ursprüngliche Eingabe zurück wenn Format nicht erkannt
+  }
+
+  function validatePhoneNumber(phone) {
+    // Entferne alle nicht-numerischen Zeichen außer +
+    let cleaned = phone.replace(/[^\d+]/g, '');
+    
+    // Entferne führende Nullen
+    cleaned = cleaned.replace(/^0+/, '');
+    
+    // Prüfe verschiedene Formate
+    if (cleaned.startsWith('+41')) {
+      cleaned = cleaned.substring(3);
+    } else if (cleaned.startsWith('41')) {
+      cleaned = cleaned.substring(2);
+    }
+    
+    // Schweizer Handynummern haben 9 Ziffern (ohne Ländercode)
+    return cleaned.length === 9 && /^\d{9}$/.test(cleaned);
+  }
+
+  function handlePhoneBlur() {
+    // Formatiere die Telefonnummer beim Verlassen des Feldes
+    if (customer.phone && validatePhoneNumber(customer.phone)) {
+      const formatted = formatPhoneNumber(customer.phone);
+      setCustomer((prev) => ({ ...prev, phone: formatted }));
+    }
   }
 
   function closeStatusMessage() {
@@ -230,13 +293,13 @@ function KaufenPageContent() {
 
     // Basic validation
     const emailOk = /.+@.+\..+/.test(customer.email);
-    const phoneOk = /[0-9]{6,}/.test(customer.phone);
+    const phoneOk = validatePhoneNumber(customer.phone);
     if (!emailOk) {
       setStatus({ state: "error", message: "Bitte eine gültige E‑Mail eingeben." });
       return;
     }
     if (!phoneOk) {
-      setStatus({ state: "error", message: "Bitte eine gültige Telefonnummer eingeben." });
+      setStatus({ state: "error", message: "Bitte eine gültige Schweizer Telefonnummer eingeben (z.B. +41 76 123 45 67 oder 076 123 45 67)." });
       return;
     }
 
@@ -553,16 +616,17 @@ function KaufenPageContent() {
                         style={{ paddingLeft: '44px' }}
                       />
                     </div>
-                    <div style={{ position: 'relative' }}>
-                      <IconPhone size={20} style={{ position: 'absolute', left: '12px', top: '12px', color: '#666' }} />
-                      <input 
-                        className="input" 
-                        placeholder="Telefonnummer" 
-                        value={customer.phone} 
-                        onChange={(e) => updateCustomer("phone", e.target.value)}
-                        style={{ paddingLeft: '44px' }}
-                      />
-                    </div>
+                            <div style={{ position: 'relative' }}>
+                              <IconPhone size={20} style={{ position: 'absolute', left: '12px', top: '12px', color: '#666' }} />
+                              <input
+                                className="input"
+                                placeholder="z.B. +41 76 123 45 67 oder 076 123 45 67"
+                                value={customer.phone}
+                                onChange={(e) => updateCustomer("phone", e.target.value)}
+                                onBlur={handlePhoneBlur}
+                                style={{ paddingLeft: '44px' }}
+                              />
+                            </div>
                     <div style={{ position: 'relative' }}>
                       <IconMail size={20} style={{ position: 'absolute', left: '12px', top: '12px', color: '#666' }} />
                       <input 
